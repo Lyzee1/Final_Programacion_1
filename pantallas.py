@@ -1,7 +1,3 @@
-# pantallas.py
-# Contiene todas las funciones que DIBUJAN en la pantalla.
-# No toma decisiones de logica: solo recibe datos y los muestra.
-
 import pygame
 import sys
 
@@ -17,18 +13,17 @@ from preguntas import SALAS
 # ── Carga de recursos ────────────────────────────────────────────────────────
 
 def cargar_recursos(fuente):
-    # Carga y escala todas las imagenes del juego.
-    # Se llama una sola vez al inicio de main.py.
-    recursos = {}
+    recursos = {} #recursos es un diccionario para poder organizar mejor el codigo
 
-    recursos["fondo"]     = _cargar_escalar(IMG_FONDO, (ANCHO, ALTO))
-    recursos["fondomenu"] = _cargar_escalar(IMG_MENU,  (ANCHO + 50, ALTO + 100))
-    recursos["fondoend"]  = _cargar_escalar(IMG_END,   (ANCHO, ALTO))
+    recursos["fondo"]     = cargar(IMG_FONDO, (ANCHO, ALTO))
+    recursos["fondomenu"] = cargar(IMG_MENU,  (ANCHO + 50, ALTO + 100))
+    recursos["fondoend"]  = cargar(IMG_END,   (ANCHO, ALTO))
 
     tam_profe = (550, 650)
-    recursos["profesora"]     = _cargar_escalar(IMG_PROFE,   tam_profe)
-    recursos["profesorabien"] = _cargar_escalar(IMG_PROFE_B, tam_profe)
-    recursos["profesoramal"]  = _cargar_escalar(IMG_PROFE_M, tam_profe)
+
+    recursos["profesora"]     = cargar(IMG_PROFE,   tam_profe)
+    recursos["profesorabien"] = cargar(IMG_PROFE_B, tam_profe)
+    recursos["profesoramal"]  = cargar(IMG_PROFE_M, tam_profe)
 
     recursos["boton_confirmar"] = pygame.Rect(100, 240, 200, 50)
     recursos["fuente"]          = fuente
@@ -36,39 +31,37 @@ def cargar_recursos(fuente):
     return recursos
 
 
-def _cargar_escalar(ruta, tamanio):
+def cargar(ruta, tamanio): #cargar es una funcion que ayuda para no tener que hacer lo de abajo 20 veces por cada imagen
     imagen = pygame.image.load(ruta)
     return pygame.transform.scale(imagen, tamanio)
 
 
 # ── Pantallas de configuracion ───────────────────────────────────────────────
 
-def dibujar_pantalla_cantidad(pantalla, recursos, entrada_texto, error_mensaje):
-    # Primera pantalla: pide la cantidad de jugadores.
-    pantalla.fill(ROSACLARO)
+def dibujar_pantalla_cantidad(pantalla, recursos, entrada_texto, error_mensaje): # primera pantalla, donde se muestra la cantidad de jugadores
+    pantalla.fill(ROSACLARO)                                                     # que va a haber 
     pantalla.blit(recursos["fondomenu"], (-50, 10))
 
-    fuente = recursos["fuente"]
+    fuente = recursos["fuente"] # esto se hace para hacer mas legible el codigo
 
     txt1 = fuente.render("Ingrese la cantidad de jugadores (1 a 10):", True, NEGRO)
-    pantalla.blit(txt1, (150, 150))
+    pantalla.blit(txt1, (150, 150)) 
 
     pygame.draw.rect(pantalla, BLANCO, (200, 200, 400, 40))
     txt2 = fuente.render(entrada_texto, True, NEGRO)
     pantalla.blit(txt2, (380, 205))
 
-    if len(error_mensaje) > 0:
-        err = fuente.render(error_mensaje, True, ROJO)
-        pantalla.blit(err, (175, 250))
+    if len(error_mensaje) > 0: #se verifica si hay un error
+        err = fuente.render(error_mensaje, True, ROJO) # si lo hay se dibuja en rojo
+        pantalla.blit(err, (175, 250)) # se posiciona el error en la pantalla
 
 
 def dibujar_pantalla_nombres(pantalla, recursos, jugadores, entrada_texto, error_mensaje):
-    # Segunda pantalla: pide el nombre de cada jugador uno a la vez.
     pantalla.fill(ROSACLARO)
     pantalla.blit(recursos["fondomenu"], (-50, 10))
 
     fuente  = recursos["fuente"]
-    numero  = len(jugadores) + 1
+    numero  = len(jugadores) + 1 # Le sumo 1 porque necesito mostrar el número del próximo jugador que voy a cargar.
 
     txt1 = fuente.render(f"Jugador {numero}, ingrese su nombre:", True, NEGRO)
     pantalla.blit(txt1, (225, 150))
@@ -87,12 +80,11 @@ def dibujar_pantalla_nombres(pantalla, recursos, jugadores, entrada_texto, error
 def dibujar_sala(pantalla, recursos, pregunta_actual, texto_usuario,
                  segundos_restantes, jugadores, jugador_actual,
                  intentos_restantes, respondio, respuesta_correcta):
-    # Dibuja la pantalla principal de juego.
     pantalla.fill(ROSACLARO)
     pantalla.blit(recursos["fondo"], (0, 0))
 
     fuente  = recursos["fuente"]
-    sala    = SALAS[pregunta_actual]
+    sala    = SALAS[pregunta_actual] 
     jugador = jugadores[jugador_actual]
 
     # Pregunta
@@ -128,10 +120,10 @@ def dibujar_sala(pantalla, recursos, pregunta_actual, texto_usuario,
         pantalla.blit(txt, (145, 300))
 
     # Boton confirmar
-    _dibujar_boton(pantalla, recursos)
+    dibujar_boton(pantalla, recursos)
 
 
-def _dibujar_boton(pantalla, recursos):
+def dibujar_boton(pantalla, recursos):
     boton  = recursos["boton_confirmar"]
     fuente = recursos["fuente"]
     pygame.draw.rect(pantalla, VERDE, boton, border_radius=10)
@@ -140,7 +132,6 @@ def _dibujar_boton(pantalla, recursos):
 
 
 def dibujar_profesora(pantalla, recursos, respondio, respuesta_correcta, pos_x_profesora):
-    # Muestra la imagen de la profesora segun el estado.
     if respondio == True:
         if respuesta_correcta == True:
             pantalla.blit(recursos["profesorabien"], (300, 150))
@@ -153,9 +144,6 @@ def dibujar_profesora(pantalla, recursos, respondio, respuesta_correcta, pos_x_p
 # ── Pantalla de resultados ───────────────────────────────────────────────────
 
 def mostrar_resultados(pantalla, recursos, jugadores, stats):
-    # Dibuja la pantalla final con puntajes y ganadores.
-    # Espera 10 segundos y cierra el juego.
-
     pantalla.fill(ROSACLARO)
     pantalla.blit(recursos["fondoend"], (0, 0))
 
@@ -168,8 +156,6 @@ def mostrar_resultados(pantalla, recursos, jugadores, stats):
     # Encabezado de la tabla
     encabezado = fuente.render("Jugador   /   Salas   / Total / Estado", True, BLANCO)
     pantalla.blit(encabezado, (185, 80))
-
-    # Fila por jugador
     pos_y = 130
 
     for jugador in jugadores:
@@ -191,21 +177,31 @@ def mostrar_resultados(pantalla, recursos, jugadores, stats):
 
         pantalla.blit(linea, (180, pos_y))
         pos_y += 30
+        
 
+    
+    
+    pos_x = 185
     # Mayor puntaje
     pantalla.blit(fuente.render("Mayor puntaje:", True, BLANCO), (185, 300))
     for nombre in stats["ganadores_puntaje"]:
-        pantalla.blit(fuente.render(nombre, True, VERDE), (185, 340))
-
+        pantalla.blit(fuente.render(nombre, True, VERDE), (pos_x, 340))
+        pos_x += 70
+        
+    pos_x = 185
     # Mas salas superadas
     pantalla.blit(fuente.render("Mas salas superadas:", True, BLANCO), (185, 380))
     for nombre in stats["ganadores_salas"]:
-        pantalla.blit(fuente.render(nombre, True, VERDE), (185, 420))
-
+        pantalla.blit(fuente.render(nombre, True, VERDE), (pos_x, 420))
+        pos_x += 70
+        
+    pos_x = 185
     # No superaron la primera sala
     pantalla.blit(fuente.render("No pasaron la primera sala:", True, BLANCO), (185, 460))
     for nombre in stats["no_pasaron_primera"]:
-        pantalla.blit(fuente.render(nombre, True, ROJO), (185, 500))
+        pantalla.blit(fuente.render(nombre, True, ROJO), (pos_x, 500))
+        pos_x += 70
+       
 
     pygame.display.flip()
     pygame.time.wait(10000)

@@ -32,13 +32,11 @@ sonido_incorrecto.set_volume(VOL_INCORRECTO)
 
 pygame.time.set_timer(EVENTO_TIMER, INTERVALO_TIMER)
 
-# ── Alias para no repetir juego.estado["..."] en cada linea ──────────────────
 e = juego.estado
 
 
 # ── Funciones antes del loop ──────────────────────────────────────────────────
 def manejar_tecla_configuracion(evento):
-    # Maneja teclas durante la fase de configuracion (cantidad y nombres).
     if e["cantidad_jugadores"] == 0:
         if evento.key == pygame.K_RETURN:
             juego.confirmar_cantidad(e["entrada_texto"])
@@ -57,9 +55,8 @@ def manejar_tecla_configuracion(evento):
 
 
 def manejar_tecla_juego(evento):
-    # Maneja teclas durante el juego (escribir y confirmar respuesta).
     if e["respondio"]:
-        return  # esperar a que pase el segundo de feedback
+        return 
 
     if evento.key == pygame.K_RETURN:
         confirmar_respuesta()
@@ -70,7 +67,6 @@ def manejar_tecla_juego(evento):
 
 
 def confirmar_respuesta():
-    # Evalua la respuesta y reproduce el sonido correspondiente.
     juego.evaluar_respuesta(e["texto_usuario"])
     if e["respuesta_correcta"]:
         sonido_correcto.play()
@@ -79,7 +75,6 @@ def confirmar_respuesta():
 
 
 def manejar_click(pos):
-    # Maneja clics del mouse (boton Confirmar).
     boton        = recursos["boton_confirmar"]
     juego_activo = len(e["jugadores"]) == e["cantidad_jugadores"]
     if juego_activo and not e["respondio"] and boton.collidepoint(pos):
@@ -87,7 +82,6 @@ def manejar_click(pos):
 
 
 def avanzar_si_corresponde():
-    # Cuando ya paso 1 segundo desde la respuesta, avanza al siguiente estado.
     if not e["respondio"]:
         return
 
@@ -120,7 +114,6 @@ while True:
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             manejar_click(pygame.mouse.get_pos())
 
-        # Tick del temporizador (cada 1 segundo)
         if evento.type == EVENTO_TIMER:
             juego_activo = len(e["jugadores"]) == e["cantidad_jugadores"]
             if juego_activo:
