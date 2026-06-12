@@ -10,7 +10,7 @@ MAX_INTENTOS   = 2
 TIEMPO_LIMITE  = 20       
 MAX_JUGADORES  = 10
 
-# ─── Timer personalizado ─────────────
+# ─── Timer ─────────────
 EVENTO_TIMER    = pygame.USEREVENT + 1
 INTERVALO_TIMER = 1000    # milisegundos
 

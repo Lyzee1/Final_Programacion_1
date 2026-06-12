@@ -73,7 +73,7 @@ def evaluar_respuesta(texto):
     if respuesta_dada == respuesta_esperada:
         jugador = estado["jugadores"][estado["jugador_actual"]]
         puntos  = SALAS[indice]["puntaje"]
-        jugador["puntos"]            += puntos
+        jugador["puntos"] += puntos
         jugador["puntajes_sala"][indice] = puntos
         estado["respuesta_correcta"]  = True
     else:
@@ -93,50 +93,47 @@ def tiempo_agotado():
 
 
 def avanzar():
-    # Devuelve True si el juego termino.
     if estado["respuesta_correcta"]:
-        estado["pregunta_actual"]    += 1
-        estado["intentos_restantes"]  = MAX_INTENTOS
+        estado["pregunta_actual"] += 1
+        estado["intentos_restantes"] = MAX_INTENTOS
 
         if estado["pregunta_actual"] >= len(SALAS):
             estado["pregunta_actual"] = 0
-            return _siguiente_jugador()
+            return siguiente_jugador()
 
     elif estado["intentos_restantes"] <= 0:
-        estado["pregunta_actual"]    = 0
+        estado["pregunta_actual"] = 0
         estado["intentos_restantes"] = MAX_INTENTOS
-        return _siguiente_jugador()
+        return siguiente_jugador()
 
-    _reiniciar_turno()
+    reiniciar_turno()
     return False
 
 
-def _siguiente_jugador():
-    # Devuelve True si el juego termino.
+def siguiente_jugador():
     estado["jugador_actual"] += 1
 
     if estado["jugador_actual"] >= len(estado["jugadores"]):
-        _calcular_completos()
+        calcular_completos()
         return True
 
-    _reiniciar_turno()
+    reiniciar_turno()
     return False
 
 
-def _reiniciar_turno():
+def reiniciar_turno():
     estado["respondio"]          = False
     estado["respuesta_correcta"] = False
     estado["segundos_restantes"] = TIEMPO_LIMITE
     estado["tiempo_inicio"]      = pygame.time.get_ticks()
 
 
-def _calcular_completos():
+def calcular_completos():
     for jugador in estado["jugadores"]:
         jugador["completo"] = all(p != 0 for p in jugador["puntajes_sala"])
 
 
 def actualizar_tiempo():
-    # Devuelve True si se agoto el tiempo.
     transcurrido = (pygame.time.get_ticks() - estado["tiempo_inicio"]) // 1000
     estado["segundos_restantes"] = max(TIEMPO_LIMITE - transcurrido, 0)
 
@@ -155,9 +152,7 @@ def animar_profesora():
 
 
 def calcular_estadisticas():
-    # Devuelve un diccionario con los resultados finales del juego.
     jugadores = estado["jugadores"]
-
     max_puntaje = max(j["puntos"] for j in jugadores)
 
     salas_por_jugador = {

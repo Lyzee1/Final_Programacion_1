@@ -13,7 +13,7 @@ from preguntas import SALAS
 # ── Carga de recursos ────────────────────────────────────────────────────────
 
 def cargar_recursos(fuente):
-    recursos = {} #recursos es un diccionario para poder organizar mejor el codigo
+    recursos = {} 
 
     recursos["fondo"]     = cargar(IMG_FONDO, (ANCHO, ALTO))
     recursos["fondomenu"] = cargar(IMG_MENU,  (ANCHO + 50, ALTO + 100))
@@ -31,18 +31,18 @@ def cargar_recursos(fuente):
     return recursos
 
 
-def cargar(ruta, tamanio): #cargar es una funcion que ayuda para no tener que hacer lo de abajo 20 veces por cada imagen
+def cargar(ruta, tamanio):
     imagen = pygame.image.load(ruta)
     return pygame.transform.scale(imagen, tamanio)
 
 
 # ── Pantallas de configuracion ───────────────────────────────────────────────
 
-def dibujar_pantalla_cantidad(pantalla, recursos, entrada_texto, error_mensaje): # primera pantalla, donde se muestra la cantidad de jugadores
-    pantalla.fill(ROSACLARO)                                                     # que va a haber 
+def dibujar_pantalla_cantidad(pantalla, recursos, entrada_texto, error_mensaje): 
+    pantalla.fill(ROSACLARO)                                                  
     pantalla.blit(recursos["fondomenu"], (-50, 10))
 
-    fuente = recursos["fuente"] # esto se hace para hacer mas legible el codigo
+    fuente = recursos["fuente"] 
 
     txt1 = fuente.render("Ingrese la cantidad de jugadores (1 a 10):", True, NEGRO)
     pantalla.blit(txt1, (150, 150)) 
@@ -51,9 +51,9 @@ def dibujar_pantalla_cantidad(pantalla, recursos, entrada_texto, error_mensaje):
     txt2 = fuente.render(entrada_texto, True, NEGRO)
     pantalla.blit(txt2, (380, 205))
 
-    if len(error_mensaje) > 0: #se verifica si hay un error
-        err = fuente.render(error_mensaje, True, ROJO) # si lo hay se dibuja en rojo
-        pantalla.blit(err, (175, 250)) # se posiciona el error en la pantalla
+    if len(error_mensaje) > 0: 
+        err = fuente.render(error_mensaje, True, ROJO)
+        pantalla.blit(err, (175, 250))
 
 
 def dibujar_pantalla_nombres(pantalla, recursos, jugadores, entrada_texto, error_mensaje):
@@ -61,7 +61,7 @@ def dibujar_pantalla_nombres(pantalla, recursos, jugadores, entrada_texto, error
     pantalla.blit(recursos["fondomenu"], (-50, 10))
 
     fuente  = recursos["fuente"]
-    numero  = len(jugadores) + 1 # Le sumo 1 porque necesito mostrar el número del próximo jugador que voy a cargar.
+    numero  = len(jugadores) + 1 
 
     txt1 = fuente.render(f"Jugador {numero}, ingrese su nombre:", True, NEGRO)
     pantalla.blit(txt1, (225, 150))
@@ -177,9 +177,6 @@ def mostrar_resultados(pantalla, recursos, jugadores, stats):
 
         pantalla.blit(linea, (180, pos_y))
         pos_y += 30
-        
-
-    
     
     pos_x = 185
     # Mayor puntaje

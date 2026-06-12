@@ -127,12 +127,10 @@ while True:
 
     # ── Dibujo ────────────────────────────────────────────────────────────────
     if e["cantidad_jugadores"] == 0:
-        dibujar_pantalla_cantidad(pantalla, recursos,
-                                  e["entrada_texto"], e["error_mensaje"])
+        dibujar_pantalla_cantidad(pantalla, recursos, e["entrada_texto"], e["error_mensaje"])
 
     elif len(e["jugadores"]) < e["cantidad_jugadores"]:
-        dibujar_pantalla_nombres(pantalla, recursos, e["jugadores"],
-                                 e["entrada_texto"], e["error_mensaje"])
+        dibujar_pantalla_nombres(pantalla, recursos, e["jugadores"], e["entrada_texto"], e["error_mensaje"])
 
     else:
         dibujar_sala(pantalla, recursos,
@@ -141,9 +139,7 @@ while True:
                      e["jugador_actual"], e["intentos_restantes"],
                      e["respondio"], e["respuesta_correcta"])
 
-        dibujar_profesora(pantalla, recursos,
-                          e["respondio"], e["respuesta_correcta"],
-                          e["pos_x_profesora"])
+        dibujar_profesora(pantalla, recursos, e["respondio"], e["respuesta_correcta"], e["pos_x_profesora"])
 
     pygame.display.flip()
     clock.tick(FPS)
